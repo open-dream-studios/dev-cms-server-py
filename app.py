@@ -4,16 +4,16 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pyannote.audio import Pipeline
 from pydantic import BaseModel
+from huggingface_hub import login
 
 HF_TOKEN = os.getenv("HF_TOKEN")
 print("Loaded HF_TOKEN:", HF_TOKEN)
 if HF_TOKEN is None:
     raise RuntimeError("Missing HF_TOKEN environment variable")
-
-# Load pipeline ONCE at startup (very important)
+ 
+login(HF_TOKEN)
 pipeline = Pipeline.from_pretrained(
-    "pyannote/speaker-diarization",
-    use_auth_token=HF_TOKEN
+    "pyannote/speaker-diarization"
 )
 
 app = FastAPI(
