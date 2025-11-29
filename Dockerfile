@@ -32,7 +32,7 @@ snapshot_download(
 )
 
 snapshot_download(
-    repo_id="pyannote/embedding-3.0",
+    repo_id="pyannote/embedding",
     local_dir="/models/pyannote/embedding",
 )
 EOF
