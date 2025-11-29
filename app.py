@@ -11,9 +11,9 @@ print("Loaded HF_TOKEN:", HF_TOKEN)
 if HF_TOKEN is None:
     raise RuntimeError("Missing HF_TOKEN environment variable")
  
-login(HF_TOKEN)
 pipeline = Pipeline.from_pretrained(
-    "pyannote/speaker-diarization"
+    "pyannote/speaker-diarization",
+    token=HF_TOKEN
 )
 
 app = FastAPI(
