@@ -75,8 +75,10 @@ from pyannote.audio import Pipeline
 HF_TOKEN = os.getenv("HF_TOKEN")
 print("Loaded HF_TOKEN:", HF_TOKEN)
 
-pipeline = Pipeline.from_pretrained("/models/pyannote/diarization")
-
+pipeline = Pipeline.from_pretrained(
+    "/models/pyannote/diarization",
+    use_auth_token=False
+)
 app = FastAPI()
 
 app.add_middleware(
