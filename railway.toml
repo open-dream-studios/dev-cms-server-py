@@ -1,0 +1,5 @@
+[build]
+builder = "DOCKERFILE"
+
+[build.args]
+HF_TOKEN = "${HF_TOKEN}"

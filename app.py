@@ -11,10 +11,7 @@ print("Loaded HF_TOKEN:", HF_TOKEN)
 if HF_TOKEN is None:
     raise RuntimeError("Missing HF_TOKEN environment variable")
  
-pipeline = Pipeline.from_pretrained(
-    "pyannote/speaker-diarization",
-    token=HF_TOKEN
-)
+pipeline = Pipeline.from_pretrained("/models/pyannote")
 
 app = FastAPI(
     title="Pyannote Diarization Service",
