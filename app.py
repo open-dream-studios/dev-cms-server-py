@@ -76,8 +76,8 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 print("Loaded HF_TOKEN:", HF_TOKEN)
 
 pipeline = Pipeline.from_pretrained(
-    "/models/pyannote/diarization",
-    use_auth_token=False
+    "pyannote/speaker-diarization-3.1",
+    use_auth_token=os.getenv("HF_TOKEN")
 )
 app = FastAPI()
 
