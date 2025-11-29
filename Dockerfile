@@ -9,13 +9,20 @@ RUN apt-get update && \
 ARG HF_TOKEN
 ENV HF_TOKEN=${HF_TOKEN}
 
-# ---- Install HuggingFace CLI ----
-RUN pip install --no-cache-dir huggingface_hub huggingface_hub[cli]
+# ---- Install HuggingFace hub ----
+RUN pip install --no-cache-dir huggingface_hub
 
-# ---- Pre-download the pyannote model ----
-RUN huggingface-cli login --token ${HF_TOKEN} && \
-    huggingface-cli download pyannote/speaker-diarization-3.1 \
-        --local-dir /models/pyannote
+# ---- Pre-download the pyannote model using Python (NOT CLI) ----
+RUN python3 - <<EOF
+from huggingface_hub import login, snapshot_download
+import os
+
+login(token=os.environ["HF_TOKEN"])
+snapshot_download(
+    repo_id="pyannote/speaker-diarization-3.1",
+    local_dir="/models/pyannote",
+)
+EOF
 
 # ---- Install Python dependencies ----
 WORKDIR /app
