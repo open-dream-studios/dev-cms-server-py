@@ -11,7 +11,12 @@ print("Loaded HF_TOKEN:", HF_TOKEN)
 if HF_TOKEN is None:
     raise RuntimeError("Missing HF_TOKEN environment variable")
  
-pipeline = Pipeline.from_pretrained("/models/pyannote")
+# pipeline = Pipeline.from_pretrained("/models/pyannote")
+pipeline = Pipeline.from_pretrained(
+    "/models/pyannote",
+    use_auth_token=False,
+    trust_remote_code=True
+)
 
 app = FastAPI(
     title="Pyannote Diarization Service",
