@@ -7,9 +7,14 @@ RUN apt-get update && \
 ARG HF_TOKEN
 ENV HF_TOKEN=${HF_TOKEN}
 
-RUN pip install --no-cache-dir huggingface_hub pyannote.audio==3.1.1 torch==2.2.2 --index-url https://download.pytorch.org/whl/cpu
+# FIXED: use extra-index-url instead of index-url
+RUN pip install --no-cache-dir \
+    huggingface_hub \
+    pyannote.audio==3.1.1 \
+    torch==2.2.2 \
+    --extra-index-url https://download.pytorch.org/whl/cpu
 
-# ---- Download pyannote models (NO CLI NEEDED) ----
+# ---- Download pyannote models ----
 RUN python3 - <<EOF
 import os
 from huggingface_hub import login, snapshot_download
@@ -39,4 +44,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 
 EXPOSE 8000
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port",  "8000"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
