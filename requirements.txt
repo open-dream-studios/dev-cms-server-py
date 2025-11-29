@@ -1,7 +1,7 @@
 fastapi
 uvicorn[standard]
 python-multipart
-numpy<2
-pyannote.audio==3.1.1
-torch==2.2.2 --index-url https://download.pytorch.org/whl/cpu
+numpy<2 
+pyannote.audio==3.3.1 
+torch==2.2.2 --index-url https://download.pytorch.org/whl/cpu 
 huggingface_hub

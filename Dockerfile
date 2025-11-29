@@ -7,13 +7,12 @@ RUN apt-get update && \
 ARG HF_TOKEN
 ENV HF_TOKEN=${HF_TOKEN}
 
-# FIXED: use extra-index-url instead of index-url
 RUN pip install --no-cache-dir --upgrade \
     huggingface_hub \
     transformers \
     torchaudio \
     torch==2.2.2 \
-    pyannote.audio==3.1.1 \
+    pyannote.audio==3.3.1 \
     --extra-index-url https://download.pytorch.org/whl/cpu
 
 # ---- Download pyannote models ----
