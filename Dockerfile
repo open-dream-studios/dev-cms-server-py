@@ -9,12 +9,12 @@ RUN apt-get update && \
 ARG HF_TOKEN
 ENV HF_TOKEN=${HF_TOKEN}
 
-# ---- Install HuggingFace client early ----
-RUN pip install --no-cache-dir huggingface_hub
+# ---- Install HuggingFace CLI ----
+RUN pip install --no-cache-dir huggingface_hub huggingface_hub[cli]
 
-# ---- Pre-download the pyannote model so runtime doesn't contact HF ----
+# ---- Pre-download the pyannote model ----
 RUN huggingface-cli login --token ${HF_TOKEN} && \
-    huggingface-cli download pyannote/speaker-diarization \
+    huggingface-cli download pyannote/speaker-diarization-3.1 \
         --local-dir /models/pyannote
 
 # ---- Install Python dependencies ----
@@ -22,11 +22,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ---- Copy app code ----
 COPY app.py .
 
-# ---- Expose port ----
 EXPOSE 8000
-
-# ---- Run ----
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
