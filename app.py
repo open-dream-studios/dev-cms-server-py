@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pyannote.audio import Pipeline
 import time
 import traceback
+import subprocess
 
 HF_TOKEN = os.getenv("HF_TOKEN")
 print("Loaded HF_TOKEN:", HF_TOKEN)
@@ -21,6 +22,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+def convert_to_wav(input_path: str) -> str:
+    """
+    Converts any audio file to a WAV 16kHz mono PCM file.
+    Returns path to the converted WAV.
+    """
+    output_path = input_path + "_converted.wav"
+    
+    command = [
+        "ffmpeg", "-y",
+        "-i", input_path,
+        "-ac", "1",          # mono
+        "-ar", "16000",      # 16 kHz
+        output_path
+    ]
+
+    subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+    return output_path
 
 @app.get("/health")
 def health():
@@ -52,7 +71,13 @@ async def diarize(file: UploadFile = File(...)):
             print("Running diarization pipeline...", flush=True)
             pipeline_start = time.time()
 
-            diarization = pipeline(tmp.name)
+            # diarization = pipeline(tmp.name)
+            print("Converting audio to WAV...", flush=True)
+            wav_path = convert_to_wav(tmp.name)
+            print(f"WAV path: {wav_path}", flush=True)
+
+            # --- Run diarization on WAV ---
+            diarization = pipeline(wav_path)
 
             pipeline_end = time.time()
             print(
